@@ -1,8 +1,9 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import Constants from "./config/constant";
 import rootRouter from "./routes";
+import errorController from "./controllers/error/error.controller";
 const app = express();
 app.use(cors());
 app.use(express.static(Constants.staticPath));
@@ -10,4 +11,5 @@ app.use(cookieParser());
 app.use(express.json({ limit: Constants.jsonLimit }));
 app.use(express.urlencoded({ limit: Constants.jsonLimit, extended: true }));
 app.use("/api", rootRouter);
+app.use(errorController.handler);
 export default app;
