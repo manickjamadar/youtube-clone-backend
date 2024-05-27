@@ -23,7 +23,7 @@ app.post(
 	async (req, res) => {
 		try {
 			res.status(200).json({
-				url: req.fileUrl,
+				url: req.cloudUrl,
 			});
 		} catch (error) {
 			console.log(error);
