@@ -1,0 +1,26 @@
+{
+  "name": "youtube-clone-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/validator": "^13.11.10",
+    "nodemon": "^3.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "mongoose": "^8.4.0",
+    "validator": "^13.12.0"
+  }
+}
