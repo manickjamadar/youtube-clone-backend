@@ -26,5 +26,5 @@
   },
   "include": ["src"],                         // Include all TypeScript files in src directory
   "exclude": ["node_modules", "dist"],        // Exclude node_modules and dist directories
-  "typeRoots": ["./src/types","./node_modules/@types", ]  // Add your custom type definitions
+  //"typeRoots": ["./src/types","./node_modules/@types", ]  // Add your custom type definitions
 }
