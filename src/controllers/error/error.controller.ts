@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../../utils/ApiError";
 const errorController = {
+	notFound: (req: Request, res: Response, next: NextFunction) => {
+		next(new ApiError({ statusCode: 404, message: "Api endpoint not found" }));
+	},
 	handler: (
 		err: Error | ApiError,
 		req: Request,

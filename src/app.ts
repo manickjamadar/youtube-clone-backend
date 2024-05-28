@@ -11,5 +11,6 @@ app.use(cookieParser());
 app.use(express.json({ limit: Constants.jsonLimit }));
 app.use(express.urlencoded({ limit: Constants.jsonLimit, extended: true }));
 app.use("/api", rootRouter);
+app.use(errorController.notFound);
 app.use(errorController.handler);
 export default app;

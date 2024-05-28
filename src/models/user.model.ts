@@ -20,7 +20,7 @@ export interface IRawUser {
 	refreshToken?: string;
 	watchHistory: mongoose.Types.ObjectId[];
 }
-export interface IUser extends UserMethods {}
+export interface IUser extends IRawUser, UserMethods {}
 export interface UserModel extends Model<IRawUser, {}, UserMethods> {}
 const userSchema = new mongoose.Schema<IRawUser, UserModel, UserMethods>(
 	{
@@ -86,7 +86,7 @@ userSchema.methods.generateAccessToken = function () {
 		{ expiresIn: env.ACCESS_TOKEN_EXPIRY }
 	);
 };
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateRefreshToken = function () {
 	return jwt.sign({ userId: this._id }, env.REFRESH_TOKEN_SECRET, {
 		expiresIn: env.REFRESH_TOKEN_EXPIRY,
 	});
