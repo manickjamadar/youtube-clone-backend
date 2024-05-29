@@ -49,11 +49,11 @@ const userSchema = new mongoose.Schema<IRawUser, UserModel, UserMethods>(
 		avatar: {
 			type: String,
 			required: true,
-			validate: [isURL, "Avatar is not valid url"],
+			validate: [isURL, "Avatar is not a valid url"],
 		},
 		coverImage: {
 			type: String,
-			validate: [isURL, "Cover image is not valid url"],
+			validate: [isURL, "Cover image is not a valid url"],
 		},
 		refreshToken: { type: String },
 		watchHistory: [

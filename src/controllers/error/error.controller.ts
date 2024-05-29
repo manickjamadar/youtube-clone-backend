@@ -18,7 +18,7 @@ const errorController = {
 			errorMessage = err.message;
 			errorMessages = err.messages;
 		}
-		console.log("Error: ", err.message);
+		console.log("Error: ", err);
 		res.status(statusCode).json({
 			message: errorMessage,
 			messages: errorMessages,

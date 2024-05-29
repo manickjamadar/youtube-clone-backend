@@ -13,6 +13,7 @@ const validatePayload =
 	(req: Req, res: Res, next: NextFunction) => {
 		try {
 			req.body = schema.parse(req.body);
+			next();
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const zodError = error;

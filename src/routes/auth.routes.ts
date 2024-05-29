@@ -3,6 +3,7 @@ import authController from "../controllers/auth/auth.controller";
 import localFileUpload from "../middlewares/localFileUpload.middleware";
 import validatePayload from "../middlewares/validatePayload.middleware";
 import { RegisterPayloadSchema } from "../controllers/auth/schema";
+import { RegisterRequest } from "../controllers/auth/types";
 
 const authRouter = Router();
 authRouter.post(

@@ -5,8 +5,10 @@ import env from "./config/env";
 import connectDB from "./config/db";
 import app from "./app";
 import User from "./models/user.model";
-// connectDB().then(() => {
-app.listen(env.PORT, () => {
-	console.log(`Server running at ${ip.address()}:${env.PORT}`);
+import mongoose from "mongoose";
+import path from "path";
+connectDB().then(() => {
+	app.listen(env.PORT, () => {
+		console.log(`Server running at ${ip.address()}:${env.PORT}`);
+	});
 });
-// });

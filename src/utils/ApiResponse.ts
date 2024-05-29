@@ -3,6 +3,11 @@ export interface ApiResponseOptions<T> {
 	message: string;
 	data: T;
 }
+export interface ApiResponseBody<T> {
+	success: boolean;
+	message: string;
+	data: T;
+}
 class ApiResponse<T> {
 	readonly statusCode: number;
 	readonly message: string;
@@ -13,6 +18,13 @@ class ApiResponse<T> {
 		this.message = options.message;
 		this.data = options.data;
 		this.success = options.statusCode < 400;
+	}
+	toJson(): ApiResponseBody<T> {
+		return {
+			data: this.data,
+			message: this.message,
+			success: this.success,
+		};
 	}
 }
 export default ApiResponse;
