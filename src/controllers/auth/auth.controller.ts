@@ -86,6 +86,12 @@ const register = asyncHandler(
 	}
 );
 const login = asyncHandler(async (req: Request, res: Response) => {
+	// validating the payload with middleware - email and password,
+	// check if user exists
+	// if exists check password is correct or not
+	// generate access token and refresh token
+	// send access token ad refresh token in cookies
+	// return user
 	res.json({
 		message: "Logining...",
 	});

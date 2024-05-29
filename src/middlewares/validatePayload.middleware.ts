@@ -1,16 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodError, ZodType } from "zod";
 import ApiError from "../utils/ApiError";
+import asyncHandler from "../utils/asyncHandler";
 export interface ValidatePayloadOptions<Schema extends ZodType> {
 	schema: Schema;
 	errorMessage?: string;
 }
-const validatePayload =
-	<Req extends Request, Res extends Response, Schema extends ZodType>({
-		schema,
-		errorMessage,
-	}: ValidatePayloadOptions<Schema>) =>
-	(req: Req, res: Res, next: NextFunction) => {
+const validatePayload = <
+	Req extends Request,
+	Res extends Response,
+	Schema extends ZodType,
+>({
+	schema,
+	errorMessage,
+}: ValidatePayloadOptions<Schema>) =>
+	asyncHandler((req: Req, res: Res, next: NextFunction) => {
 		try {
 			req.body = schema.parse(req.body);
 			next();
@@ -27,5 +31,5 @@ const validatePayload =
 				});
 			}
 		}
-	};
+	});
 export default validatePayload;
