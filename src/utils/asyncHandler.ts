@@ -1,6 +1,6 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
-const asyncHandler = <Req, Res>(
+const asyncHandler = <Req extends Request, Res extends Response>(
 	handler: (req: Req, res: Res, next: NextFunction) => void
 ) => {
 	return async (req: Req, res: Res, next: NextFunction) => {

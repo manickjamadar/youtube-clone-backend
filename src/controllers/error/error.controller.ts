@@ -12,13 +12,17 @@ const errorController = {
 	) => {
 		let statusCode = 500;
 		let errorMessage = "Something went wrong";
+		let errorMessages: string[] = [];
 		if (err instanceof ApiError) {
 			statusCode = err.statusCode;
 			errorMessage = err.message;
+			errorMessages = err.messages;
 		}
 		console.log("Error: ", err.message);
 		res.status(statusCode).json({
 			message: errorMessage,
+			messages: errorMessages,
+			data: undefined,
 			success: false,
 		});
 	},

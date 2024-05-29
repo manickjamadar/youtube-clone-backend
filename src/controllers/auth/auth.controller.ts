@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
-import ApiError from "../../utils/ApiError";
 import { RegisterRequest } from "./types";
 const register = asyncHandler(async (req: RegisterRequest, res: Response) => {
 	//getting the payload
-	//validating the payload
+	let payload = req.body;
+	//validating the payload with middleware
 	//check whether user is exist or not by username and email
-	//get avatar image and upload to cloudinary and get cloud url
+	//get avatar image and cover image and upload to cloudinary and get cloud url
 	//create new user
 	//save the user
 	//return response
 	res.json({
 		message: "Registering",
-		data: req.body,
+		data: payload,
 	});
 });
 const login = asyncHandler(async (req: Request, res: Response) => {
