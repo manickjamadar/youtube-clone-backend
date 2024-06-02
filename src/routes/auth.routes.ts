@@ -6,7 +6,7 @@ import { RegisterPayloadSchema } from "../controllers/auth/schema";
 import { RegisterRequest } from "../controllers/auth/types";
 
 const authRouter = Router();
-//send mail to registered user
+//send mail to registered user for veifying email
 authRouter.post(
 	"/register",
 	localFileUpload.fields([
