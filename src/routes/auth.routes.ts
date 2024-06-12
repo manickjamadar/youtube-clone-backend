@@ -7,6 +7,7 @@ import {
 	RegisterPayloadSchema,
 } from "../controllers/auth/schema";
 import { RegisterRequest } from "../controllers/auth/types";
+import authenticatedRoute from "../middlewares/authenticatedRoute";
 
 const authRouter = Router();
 //send mail to registered user for veifying email
@@ -30,8 +31,8 @@ authRouter.post(
 	}),
 	authController.login
 );
+authRouter.post("/logout", authenticatedRoute, authController.logout);
 //authRouter.post("/verify-email")
-// authRouter.post("/logout")
 // authRouter.post("/refresh-token")
 // authRouter.post("/auto-login")
 // authRouter.post("/forgot-password")

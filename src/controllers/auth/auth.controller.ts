@@ -128,9 +128,14 @@ const login = asyncHandler(async (req: LoginRequest, res: LoginResponse) => {
 		.cookie("refreshToken", refreshToken, { httpOnly: true })
 		.json(response.toJson());
 });
-const logout = asyncHandler(async (req, res, next) => {});
+const logout = asyncHandler(async (req, res, next) => {
+	res.status(200).json({
+		message: "Logout in process",
+	});
+});
 const authController = {
 	register,
 	login,
+	logout,
 };
 export default authController;

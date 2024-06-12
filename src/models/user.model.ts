@@ -5,6 +5,12 @@ import Constants from "../config/constant";
 import isURL from "validator/lib/isURL";
 import jwt from "jsonwebtoken";
 import env from "../config/env";
+export type AccessTokenPayload = {
+	userId: string;
+	email: string;
+	fullName: string;
+};
+export type RefreshTokenPayload = { userId: string };
 export interface UserMethods {
 	comparePassword: (plainPassword: string) => Promise<boolean>;
 	generateAccessToken: () => string;
@@ -20,8 +26,12 @@ export interface IRawUser {
 	refreshToken?: string;
 	watchHistory: mongoose.Types.ObjectId[];
 }
+
 export interface IUser extends IRawUser, UserMethods {}
-export interface UserModel extends Model<IRawUser, {}, UserMethods> {}
+export interface UserModel extends Model<IRawUser, {}, UserMethods> {
+	verifyAccessToken(token: string): AccessTokenPayload;
+	verifyRefreshToken(token: string): RefreshTokenPayload;
+}
 const userSchema = new mongoose.Schema<IRawUser, UserModel, UserMethods>(
 	{
 		fullName: { type: String, required: true, trim: true },
@@ -62,6 +72,14 @@ const userSchema = new mongoose.Schema<IRawUser, UserModel, UserMethods>(
 	},
 	{
 		timestamps: true,
+		statics: {
+			verifyAccessToken: function (token: string) {
+				return jwt.verify(token, env.ACCESS_TOKEN_SECRET);
+			},
+			verifyRefreshToken: function (token: string) {
+				return jwt.verify(token, env.REFRESH_TOKEN_SECRET);
+			},
+		},
 	}
 );
 //hashing password before save
@@ -80,19 +98,25 @@ userSchema.methods.comparePassword = function (plainPassword: string) {
 	return bcrypt.compare(plainPassword, this.password);
 };
 userSchema.methods.generateAccessToken = function () {
-	return jwt.sign(
-		{ userId: this._id, email: this.email, fullName: this.fullName },
-		env.ACCESS_TOKEN_SECRET,
-		{ expiresIn: env.ACCESS_TOKEN_EXPIRY }
-	);
+	const payload: AccessTokenPayload = {
+		userId: this._id.toHexString(),
+		email: this.email,
+		fullName: this.fullName,
+	};
+	return jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
+		expiresIn: env.ACCESS_TOKEN_EXPIRY,
+	});
 };
 userSchema.methods.generateRefreshToken = function () {
-	return jwt.sign({ userId: this._id }, env.REFRESH_TOKEN_SECRET, {
+	const payload: RefreshTokenPayload = { userId: this._id.toHexString() };
+	return jwt.sign(payload, env.REFRESH_TOKEN_SECRET, {
 		expiresIn: env.REFRESH_TOKEN_EXPIRY,
 	});
 };
+// userSchema.static("verifyAccessToken",function(){});
+// userSchema.static("verifyRefreshToken",function(){});
 const User: UserModel =
-	mongoose.models.User ||
+	(mongoose.models.User as UserModel) ||
 	mongoose.model<IRawUser, UserModel>(Constants.modelNames.user, userSchema);
 
 export default User;
