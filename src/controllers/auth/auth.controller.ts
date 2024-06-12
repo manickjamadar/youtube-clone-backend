@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import {
+	LoginRequest,
+	LoginResponse,
+	LoginResponseData,
 	RegisterRequest,
 	RegisterRequestFiles,
 	RegisterResponse,
@@ -85,18 +88,47 @@ const register = asyncHandler(
 		res.status(response.statusCode).json(response.toJson());
 	}
 );
-const login = asyncHandler(async (req: Request, res: Response) => {
-	// validating the payload with middleware - email and password,
-	// check if user exists
-	// if exists check password is correct or not
-	// generate access token and refresh token
-	// send access token ad refresh token in cookies
-	// return user
-	res.json({
-		message: "Logining...",
+const login = asyncHandler(async (req: LoginRequest, res: LoginResponse) => {
+	// validating the payload with middleware - email and password, Done;
+	const payload = req.body;
+	// check if user exists by email or username;
+	const user = await User.findOne({
+		$or: [{ username: payload.username }, { email: payload.email }],
 	});
+	if (!user) {
+		throw new ApiError({ message: "User not found", statusCode: 404 });
+	}
+	// if exists check password is correct or not
+	const isPasswordCorrect = await user.comparePassword(payload.password);
+	if (!isPasswordCorrect) {
+		throw new ApiError({ message: "Invalid Credentials", statusCode: 410 });
+	}
+	// generate access token and refresh token
+	const accessToken = user.generateAccessToken();
+	const refreshToken = user.generateRefreshToken();
+	user.refreshToken = refreshToken;
+	await user.save();
+	// send access token ad refresh token in cookies
+	// const cookiesOptions = {
+	// 	httpOnl
+	// }
+	// return user
+	const response = new ApiResponse<LoginResponseData>({
+		message: "User logged in successfully",
+		statusCode: 200,
+		data: {
+			accessToken,
+			refreshToken,
+			user,
+		},
+	});
+	res
+		.status(response.statusCode)
+		.cookie("accessToken", accessToken, { httpOnly: true })
+		.cookie("refreshToken", refreshToken, { httpOnly: true })
+		.json(response.toJson());
 });
-
+const logout = asyncHandler(async (req, res, next) => {});
 const authController = {
 	register,
 	login,

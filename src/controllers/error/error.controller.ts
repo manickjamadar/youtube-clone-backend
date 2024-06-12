@@ -24,6 +24,7 @@ const errorController = {
 			messages: errorMessages,
 			data: undefined,
 			success: false,
+			status: statusCode,
 		});
 	},
 };

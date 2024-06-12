@@ -21,9 +21,14 @@ const validatePayload = <
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const zodError = error;
-				const message = errorMessage || "Payloads are invalid";
-				const messages: string[] = zodError.errors.map(error => error.message);
-				throw new ApiError({ statusCode: 400, message, messages });
+				const hasSingleError = zodError.errors.length === 1;
+				const message = hasSingleError
+					? zodError.errors[0].message
+					: errorMessage || "Payloads are invalid";
+				const messages: string[] = hasSingleError
+					? []
+					: zodError.errors.map(error => error.message);
+				throw new ApiError({ statusCode: 422, message, messages });
 			} else {
 				throw new ApiError({
 					statusCode: 500,

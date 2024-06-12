@@ -2,7 +2,10 @@ import { Router } from "express";
 import authController from "../controllers/auth/auth.controller";
 import localFileUpload from "../middlewares/localFileUpload.middleware";
 import validatePayload from "../middlewares/validatePayload.middleware";
-import { RegisterPayloadSchema } from "../controllers/auth/schema";
+import {
+	LoginPayloadSchema,
+	RegisterPayloadSchema,
+} from "../controllers/auth/schema";
 import { RegisterRequest } from "../controllers/auth/types";
 
 const authRouter = Router();
@@ -19,7 +22,15 @@ authRouter.post(
 	}),
 	authController.register
 );
-// authRouter.post("/login", authController.login);
+authRouter.post(
+	"/login",
+	validatePayload({
+		schema: LoginPayloadSchema,
+		errorMessage: "Login fields are invalid",
+	}),
+	authController.login
+);
+//authRouter.post("/verify-email")
 // authRouter.post("/logout")
 // authRouter.post("/refresh-token")
 // authRouter.post("/auto-login")

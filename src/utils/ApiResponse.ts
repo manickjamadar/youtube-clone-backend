@@ -7,6 +7,7 @@ export interface ApiResponseBody<T> {
 	success: boolean;
 	message: string;
 	data: T;
+	status: number;
 }
 class ApiResponse<T> {
 	readonly statusCode: number;
@@ -24,6 +25,7 @@ class ApiResponse<T> {
 			data: this.data,
 			message: this.message,
 			success: this.success,
+			status: this.statusCode,
 		};
 	}
 }
